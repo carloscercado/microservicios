@@ -1,27 +1,27 @@
 package com.uptos.inventory.dao;
 
-import com.tasnet.wankar.config.MyBatisUtil;
-import com.uptos.inventory.mapper.InsumoMapper;
-import com.uptos.inventory.model.Insumo;
+import com.uptos.inventory.config.MyBatisUtil;
+import com.uptos.inventory.model.Estante;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
+import com.uptos.inventory.mapper.EstanteMapper;
 
 /**
  *
  * @author Carlos Cercado
  * @email cercadocarlos@gmail.com
  */
-public class InsumoDAO
+public class EstanteDAO
 {
 
-    public static boolean save(Insumo obj)
+    public static boolean save(Estante obj)
     {
         SqlSession sesion = null;
         boolean estado = false;
         try
         {
             sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
+            EstanteMapper map = sesion.getMapper(EstanteMapper.class);
             map.insert(obj);
             sesion.commit();
             estado = true;
@@ -40,14 +40,14 @@ public class InsumoDAO
         return estado;
     }
     
-    public static Insumo findById(int id)
+    public static Estante findById(int id)
     {
         SqlSession sesion = null;
-        Insumo obj = null;
+        Estante obj = null;
         try
         {
             sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
+            EstanteMapper map = sesion.getMapper(EstanteMapper.class);
             obj = map.getById(id);
             sesion.commit();
         } catch (Exception e)
@@ -65,14 +65,14 @@ public class InsumoDAO
 
     }
 
-    public static List<Insumo> getAll()
+    public static List<Estante> getAll()
     {
         SqlSession sesion = null;
-        List<Insumo> objs = null;
+        List<Estante> objs = null;
         try
         {
             sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
+            EstanteMapper map = sesion.getMapper(EstanteMapper.class);
             objs = map.getAll();
             sesion.commit();
         } catch (Exception e)
@@ -90,14 +90,14 @@ public class InsumoDAO
 
     }
 
-    public static List<Insumo> getAllByCategory(int categoria)
+    public static List<Estante> getAllByCategory(int categoria)
     {
         SqlSession sesion = null;
-        List<Insumo> objs = null;
+        List<Estante> objs = null;
         try
         {
             sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
+            EstanteMapper map = sesion.getMapper(EstanteMapper.class);
             objs = map.getAllByCategory(categoria);
             sesion.commit();
         } catch (Exception e)
