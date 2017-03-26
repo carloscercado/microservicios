@@ -1,0 +1,15 @@
+#Directorios especificos
+dist/
+build/
+target/
+
+#netbeans especificos
+core
+nbproject/*
+!nbproject/project.properties
+!nbproject/project.xml
+!nb-configuration.xml
+
+#java especificos
+*.class
+
