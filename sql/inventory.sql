@@ -1,7 +1,14 @@
-/*
+﻿/*
 *  ************************************************************
 */
 --Referente a las zonas fisicas donde se ubican los productos
+create role ubicacion;
+create role productos;
+create role usuarios;
+create role salidas;
+create role compras;
+create role gerencia;
+
 CREATE TABLE empresa (
     id int PRIMARY KEY,
     nombre text NOT NULL,
@@ -54,7 +61,7 @@ CREATE TABLE categoria (
     categoria varchar(20) NOT NULL
 );
 
-ALTER TABLE public.categoria OWNER TO producto;
+ALTER TABLE public.categoria OWNER TO productos;
 
 CREATE TABLE insumo (
     id int PRIMARY KEY,
@@ -69,7 +76,7 @@ CREATE TABLE insumo (
 );
 
 
-ALTER TABLE public.insumo OWNER TO producto;
+ALTER TABLE public.insumo OWNER TO productos;
 
 
 CREATE TABLE perece (
@@ -79,7 +86,7 @@ CREATE TABLE perece (
 );
 
 
-ALTER TABLE public.perece OWNER TO producto;
+ALTER TABLE public.perece OWNER TO productos;
 
 /*
 *  ************************************************************
