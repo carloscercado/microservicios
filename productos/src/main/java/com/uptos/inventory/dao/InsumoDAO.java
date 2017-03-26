@@ -1,6 +1,6 @@
 package com.uptos.inventory.dao;
 
-import com.tasnet.wankar.config.MyBatisUtil;
+import com.uptos.inventory.config.MyBatisUtil;
 import com.uptos.inventory.mapper.InsumoMapper;
 import com.uptos.inventory.model.Insumo;
 import java.util.List;

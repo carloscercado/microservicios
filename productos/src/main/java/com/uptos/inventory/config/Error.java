@@ -1,4 +1,4 @@
-package com.tasnet.wankar.config;
+package com.uptos.inventory.config;
 
 public class Error
 {

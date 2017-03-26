@@ -1,4 +1,4 @@
-package com.tasnet.wankar.config;
+package com.uptos.inventory.config;
 
 import java.io.InputStream;
 import org.apache.ibatis.io.Resources;
