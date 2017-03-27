@@ -4,7 +4,7 @@ El diseño de grandes aplicaciones para empresas está evolucionando de arquitec
  
 Basado en un ejemplo concreto, en este proyecto se desarrollará un sistema para la gestión de inventario bajo la arquitectura de microservicios, mostrando los desafíos de ésta en un entorno de intranet pero que puede ser facilmente acoplado a entorno cloud.
 
-El sistema de inventario estará conformado por 6 servicios, cada uno desarrollado bajo la filosofia [Rest](https://es.wikipedia.org/wiki/Transferencia_de_Estado_Representacional) y siguiendo las buenas practicas recomendadas [**AQUI**](https://elbauldelprogramador.com/buenas-practicas-para-el-diseno-de-una-api-restful-pragmatica/).
+El sistema de inventario estará conformado por 7 servicios, cada uno desarrollado bajo la filosofia [Rest](https://es.wikipedia.org/wiki/Transferencia_de_Estado_Representacional) y siguiendo las buenas practicas recomendadas [**AQUI**](https://elbauldelprogramador.com/buenas-practicas-para-el-diseno-de-una-api-restful-pragmatica/).
 
 A continuación los servicios web que conforman al sistema de inventario:
 
@@ -15,6 +15,17 @@ Este servicio tendra como objetivo manejar toda la informacion referente al espa
 ## Productos [ir](https://github.com/carloscercado/microservicios/tree/master/productos)
 
 Este servicio tendra como objetivo manejar toda la informacion referente al los productos con los que se trabajan en la organizacion, sus detalles, las categorias, los tamaños y sus fechas de vencimientos.
+
+## Usuarios [ir](#)
+
+## Compras [ir](#)
+
+## Salidas [ir](#)
+
+## Gerencia [ir](#)
+
+## Gateway [ir](#)
+
  
 
 
