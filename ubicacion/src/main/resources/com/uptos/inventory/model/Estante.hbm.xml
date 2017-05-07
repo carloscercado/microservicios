@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-may-2017 7:59:35 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.uptos.inventory.model.Estante" table="estante" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="almacen" class="com.uptos.inventory.model.Almacen" fetch="select">
+            <column name="almacen" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="20" not-null="true" />
+        </property>
+        <set name="cubiculos" table="cubiculo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="estante" not-null="true" />
+            </key>
+            <one-to-many class="com.uptos.inventory.model.Cubiculo" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,13 +1,11 @@
 package com.uptos.inventory.dao;
-import com.uptos.inventory.model.Almacen;
 
+import com.uptos.inventory.model.Empresa;
 /**
  *
  * @author Carlos Cercado
  * @email cercadocarlos@gmail.com
  */
-public class AlmacenDAO implements Crud<Almacen>
+public class EmpresaDAO implements Crud<Empresa>
 {
-
-  
 }

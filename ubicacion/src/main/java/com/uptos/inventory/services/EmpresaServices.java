@@ -7,8 +7,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import com.uptos.inventory.config.Error;
-import com.uptos.inventory.dao.AlmacenDAO;
-import com.uptos.inventory.model.Almacen;
+import com.uptos.inventory.dao.EmpresaDAO;
+import com.uptos.inventory.model.Empresa;
 import java.util.List;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,16 +22,16 @@ import javax.ws.rs.core.Response;
  * @author Carlos Cercado
  * @email cercadocarlos@gmail.com
  */
-@Path("almacenes")
-public class AlmacenServices
+@Path("empresas")
+public class EmpresaServices
 {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get()
     {
-        AlmacenDAO db = new AlmacenDAO();
-        List<Almacen> lista = db.read("from Almacen al join fetch al.empresa");
+        EmpresaDAO db = new EmpresaDAO();
+        List<Empresa> lista = db.read("from Empresa");
         if (lista.size() > 0)
         {
             Gson gson = new Gson();
@@ -41,29 +41,14 @@ public class AlmacenServices
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @GET
-    @Path("/empresa/{empresa}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCompany(@PathParam("empresa") int id)
-    {
-        AlmacenDAO db = new AlmacenDAO();
-        List<Almacen> lista = db.read("from Almacen al join fetch al.empresa em where em.id="+id);
-        if (lista.size() > 0)
-        {
-            Gson gson = new Gson();
-            String salida = gson.toJson(lista);
-            return Response.ok(salida).build();
-        }
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
-
+   
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id)
     {
-        AlmacenDAO db = new AlmacenDAO();
-        Almacen obj = db.get("from Almacen idi join fetch idi.empresa where idi.id=" + id);
+        EmpresaDAO db = new EmpresaDAO();
+        Empresa obj = db.get("from Empresa idi where idi.id=" + id);
         if (obj != null)
         {
             return Response.ok(obj).build();
@@ -76,13 +61,13 @@ public class AlmacenServices
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response post(@FormParam("name") String nombre)
     {
-        Almacen obj = new Almacen();
+        Empresa obj = new Empresa();
         obj.setNombre(nombre);
         if (obj.validate() == null)
         {
-            AlmacenDAO db = new AlmacenDAO();
+            EmpresaDAO db = new EmpresaDAO();
             obj.toUpper();
-            Almacen res = db.create(obj);
+            Empresa res = db.create(obj);
             if (res != null)
             {
                 return Response.status(Response.Status.CREATED).entity(res).build();
