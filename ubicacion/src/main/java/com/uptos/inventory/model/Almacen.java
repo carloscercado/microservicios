@@ -15,18 +15,24 @@ import javax.json.JsonObjectBuilder;
 public class Almacen implements java.io.Serializable
 {
 
-    private int id;
+    private Integer id;
     private Empresa empresa;
     private String nombre;
     private String direccion;
     private String telefono;
-    private Set estantes = new HashSet(0);
 
     public Almacen()
     {
     }
 
-    public Almacen(int id, Empresa empresa, String nombre, String direccion)
+    public Almacen(Integer id)
+    {
+        this.id = id;
+    }
+    
+    
+
+    public Almacen(Integer id, Empresa empresa, String nombre, String direccion)
     {
         this.id = id;
         this.empresa = empresa;
@@ -34,22 +40,20 @@ public class Almacen implements java.io.Serializable
         this.direccion = direccion;
     }
 
-    public Almacen(int id, Empresa empresa, String nombre, String direccion, String telefono, Set estantes)
+    public Almacen(Empresa empresa, String nombre, String direccion, String telefono)
     {
-        this.id = id;
         this.empresa = empresa;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.estantes = estantes;
     }
 
-    public int getId()
+    public Integer getId()
     {
         return this.id;
     }
 
-    public void setId(int id)
+    public void setId(Integer id)
     {
         this.id = id;
     }
@@ -94,16 +98,6 @@ public class Almacen implements java.io.Serializable
         this.telefono = telefono;
     }
 
-    public Set getEstantes()
-    {
-        return this.estantes;
-    }
-
-    public void setEstantes(Set estantes)
-    {
-        this.estantes = estantes;
-    }
-
     public void toUpper()
     {
         this.nombre = this.nombre.toUpperCase();
@@ -123,12 +117,20 @@ public class Almacen implements java.io.Serializable
         {
             res.add("nombre", "no puede ser null");
         }
-
-        EmpresaDAO db = new EmpresaDAO();
-        this.empresa = db.get("from Empresa em where em.id=" + this.empresa.getId());
-        if (this.empresa == null)
+        if (this.empresa.getId() == null)
         {
-            res.add("empresa", "no existe");
+            res.add("empresa", "no puede ser null");
+        } else
+        {
+            EmpresaDAO db = new EmpresaDAO();
+            Empresa emp = db.get("from Empresa em where em.id=" + this.empresa.getId());
+            if(emp == null)
+            {
+                res.add("empresa", "no existe");
+            }else
+            {
+                this.empresa = emp;
+            }
         }
 
         JsonObject values = res.build();

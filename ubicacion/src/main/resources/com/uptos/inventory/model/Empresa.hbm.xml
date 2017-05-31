@@ -29,11 +29,6 @@
         <property name="rif" type="string">
             <column name="rif" length="30" not-null="true" />
         </property>
-        <set name="almacens" table="almacen" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="empresa" not-null="true" />
-            </key>
-            <one-to-many class="com.uptos.inventory.model.Almacen" />
-        </set>
+        
     </class>
 </hibernate-mapping>

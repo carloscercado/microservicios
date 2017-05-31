@@ -14,11 +14,6 @@
         <property name="nombre" type="string">
             <column name="nombre" length="20" not-null="true" />
         </property>
-        <set name="cubiculos" table="cubiculo" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="estante" not-null="true" />
-            </key>
-            <one-to-many class="com.uptos.inventory.model.Cubiculo" />
-        </set>
+      
     </class>
 </hibernate-mapping>

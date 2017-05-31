@@ -20,11 +20,6 @@
         <property name="telefono" type="string">
             <column name="telefono" length="20" />
         </property>
-        <set name="estantes" table="estante" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="almacen" not-null="true" />
-            </key>
-            <one-to-many class="com.uptos.inventory.model.Estante" />
-        </set>
+        
     </class>
 </hibernate-mapping>

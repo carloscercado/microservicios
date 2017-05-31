@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import com.uptos.inventory.config.Error;
 import com.uptos.inventory.dao.AlmacenDAO;
 import com.uptos.inventory.model.Almacen;
+import com.uptos.inventory.model.Empresa;
 import java.util.List;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -74,10 +75,13 @@ public class AlmacenServices
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response post(@FormParam("name") String nombre)
+    public Response post(@FormParam("nombre") String nombre,
+            @FormParam("direccion") String direccion,
+            @FormParam("telefono") String telefono,
+            @FormParam("empresa") Integer empresa)
     {
-        Almacen obj = new Almacen();
-        obj.setNombre(nombre);
+        Empresa emp = new Empresa(empresa);
+        Almacen obj = new Almacen(emp, nombre, direccion, telefono);
         if (obj.validate() == null)
         {
             AlmacenDAO db = new AlmacenDAO();

@@ -15,7 +15,7 @@ import javax.json.JsonObjectBuilder;
 public class Empresa  implements java.io.Serializable {
 
 
-     private int id;
+     private Integer id;
      private String nombre;
      private String direccion;
      private String estado;
@@ -23,13 +23,18 @@ public class Empresa  implements java.io.Serializable {
      private String telefono;
      private String correo;
      private String rif;
-     private Set almacens = new HashSet(0);
 
     public Empresa() {
     }
 
+    public Empresa(Integer id)
+    {
+        this.id = id;
+    }
+
+    
 	
-    public Empresa(int id, String nombre, String direccion, String estado, String ciudad, String rif) {
+    public Empresa(Integer id, String nombre, String direccion, String estado, String ciudad, String rif) {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
@@ -37,23 +42,13 @@ public class Empresa  implements java.io.Serializable {
         this.ciudad = ciudad;
         this.rif = rif;
     }
-    public Empresa(int id, String nombre, String direccion, String estado, String ciudad, String telefono, String correo, String rif, Set almacens) {
-       this.id = id;
-       this.nombre = nombre;
-       this.direccion = direccion;
-       this.estado = estado;
-       this.ciudad = ciudad;
-       this.telefono = telefono;
-       this.correo = correo;
-       this.rif = rif;
-       this.almacens = almacens;
-    }
+
    
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
     
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getNombre() {
@@ -105,13 +100,7 @@ public class Empresa  implements java.io.Serializable {
     public void setRif(String rif) {
         this.rif = rif;
     }
-    public Set getAlmacens() {
-        return this.almacens;
-    }
-    
-    public void setAlmacens(Set almacens) {
-        this.almacens = almacens;
-    }
+
 
     public void toUpper()
     {

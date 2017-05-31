@@ -8,6 +8,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import com.uptos.inventory.config.Error;
 import com.uptos.inventory.dao.EstanteDAO;
+import com.uptos.inventory.model.Almacen;
 import com.uptos.inventory.model.Estante;
 import java.util.List;
 import javax.ws.rs.POST;
@@ -52,6 +53,7 @@ public class EstanteServices
         if (lista.size() > 0)
         {
             Gson gson = new Gson();
+            lista.stream().forEach(x -> x.setAlmacen(null));
             String salida = gson.toJson(lista);
             return Response.ok(salida).build();
         }
@@ -76,10 +78,11 @@ public class EstanteServices
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response post(@FormParam("name") String nombre)
+    public Response post(@FormParam("nombre") String nombre,
+            @FormParam("almacen") Integer almacen)
     {
-        Estante obj = new Estante();
-        obj.setNombre(nombre);
+        Almacen alm = new Almacen(almacen);
+        Estante obj = new Estante(alm, nombre);
         if (obj.validate() == null)
         {
             EstanteDAO db = new EstanteDAO();

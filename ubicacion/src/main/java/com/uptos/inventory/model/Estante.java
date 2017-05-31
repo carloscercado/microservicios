@@ -12,65 +12,66 @@ import javax.json.JsonObjectBuilder;
  * @author Carlos Cercado
  * @email cercadocarlos@gmail.com
  */
-public class Estante  implements java.io.Serializable {
+public class Estante implements java.io.Serializable
+{
 
+    private int id;
+    private Almacen almacen;
+    private String nombre;
 
-     private int id;
-     private Almacen almacen;
-     private String nombre;
-     private Set cubiculos = new HashSet(0);
-
-    public Estante() {
+    public Estante()
+    {
     }
 
-	
-    public Estante(int id, Almacen almacen, String nombre) {
+    public Estante(int id, Almacen almacen, String nombre)
+    {
         this.id = id;
         this.almacen = almacen;
         this.nombre = nombre;
     }
-    public Estante(int id, Almacen almacen, String nombre, Set cubiculos) {
-       this.id = id;
-       this.almacen = almacen;
-       this.nombre = nombre;
-       this.cubiculos = cubiculos;
+
+    public Estante(Almacen almacen, String nombre)
+    {
+        this.almacen = almacen;
+        this.nombre = nombre;
     }
-   
-    public int getId() {
+
+    public int getId()
+    {
         return this.id;
     }
-    
-    public void setId(int id) {
+
+    public void setId(int id)
+    {
         this.id = id;
     }
-    public Almacen getAlmacen() {
+
+    public Almacen getAlmacen()
+    {
         return this.almacen;
     }
-    
-    public void setAlmacen(Almacen almacen) {
+
+    public void setAlmacen(Almacen almacen)
+    {
         this.almacen = almacen;
     }
-    public String getNombre() {
+
+    public String getNombre()
+    {
         return this.nombre;
     }
-    
-    public void setNombre(String nombre) {
+
+    public void setNombre(String nombre)
+    {
         this.nombre = nombre;
-    }
-    public Set getCubiculos() {
-        return this.cubiculos;
-    }
-    
-    public void setCubiculos(Set cubiculos) {
-        this.cubiculos = cubiculos;
     }
 
     public void toUpper()
     {
         this.nombre = this.nombre.toUpperCase();
     }
-    
-     public JsonObject validate()
+
+    public JsonObject validate()
     {
         JsonObjectBuilder res = Json.createObjectBuilder();
 
@@ -79,11 +80,20 @@ public class Estante  implements java.io.Serializable {
             res.add("nombre", "no puede ser null");
         }
 
-        AlmacenDAO db = new AlmacenDAO();
-        this.almacen = db.get("from Almacen em where em.id=" + this.almacen.getId());
-        if (this.almacen == null)
+        if (this.almacen.getId() == null)
         {
-            res.add("empresa", "no existe");
+            res.add("almacen", "no puede ser null");
+        } else
+        {
+            AlmacenDAO db = new AlmacenDAO();
+            Almacen emp = db.get("from Almacen em where em.id=" + this.almacen.getId());
+            if (emp == null)
+            {
+                res.add("almacen", "no existe");
+            } else
+            {
+                this.almacen = emp;
+            }
         }
 
         JsonObject values = res.build();
@@ -91,7 +101,4 @@ public class Estante  implements java.io.Serializable {
 
     }
 
-
 }
-
-
