@@ -15,7 +15,7 @@ import javax.json.JsonObjectBuilder;
 public class Estante implements java.io.Serializable
 {
 
-    private int id;
+    private Integer id;
     private Almacen almacen;
     private String nombre;
 
@@ -23,7 +23,13 @@ public class Estante implements java.io.Serializable
     {
     }
 
-    public Estante(int id, Almacen almacen, String nombre)
+    public Estante(Integer id)
+    {
+        this.id = id;
+    }
+
+    
+    public Estante(Integer id, Almacen almacen, String nombre)
     {
         this.id = id;
         this.almacen = almacen;
@@ -36,12 +42,12 @@ public class Estante implements java.io.Serializable
         this.nombre = nombre;
     }
 
-    public int getId()
+    public Integer getId()
     {
         return this.id;
     }
 
-    public void setId(int id)
+    public void setId(Integer id)
     {
         this.id = id;
     }

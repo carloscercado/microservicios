@@ -62,11 +62,21 @@ public class Cubiculo  implements java.io.Serializable {
             res.add("nombre", "no puede ser null");
         }
 
-        EstanteDAO db = new EstanteDAO();
-        this.estante = db.get("from Estante es where es.id=" + this.estante.getId());
-        if (this.estante == null)
+        
+        if (this.estante.getId() == null)
         {
-            res.add("empresa", "no existe");
+            res.add("estante", "no puede ser null");
+        } else
+        {
+            EstanteDAO db = new EstanteDAO();
+            Estante emp = db.get("from Estante em where em.id=" + this.estante.getId());
+            if (emp == null)
+            {
+                res.add("estante", "no existe");
+            } else
+            {
+                this.estante = emp;
+            }
         }
 
         JsonObject values = res.build();

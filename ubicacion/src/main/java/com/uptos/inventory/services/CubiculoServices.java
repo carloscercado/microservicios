@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import com.uptos.inventory.config.Error;
 import com.uptos.inventory.dao.CubiculoDAO;
 import com.uptos.inventory.model.Cubiculo;
+import com.uptos.inventory.model.Estante;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.ws.rs.POST;
@@ -69,7 +70,7 @@ public class CubiculoServices
             Gson gson = new Gson();
             lista.stream().forEach(x ->
             {
-                x.getEstante().getAlmacen().setEmpresa(null);
+                x.setEstante(null);
             });
             String salida = gson.toJson(lista, fooType);
             return Response.ok(salida).build();
@@ -102,10 +103,11 @@ public class CubiculoServices
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response post(@FormParam("name") String nombre)
+    public Response post(@FormParam("nombre") String nombre,
+            @FormParam("estante") Integer estante)
     {
-        Cubiculo obj = new Cubiculo();
-        obj.setNombre(nombre);
+        Estante est  = new Estante(estante);
+        Cubiculo obj = new Cubiculo(0, est, nombre);
         if (obj.validate() == null)
         {
             CubiculoDAO db = new CubiculoDAO();
