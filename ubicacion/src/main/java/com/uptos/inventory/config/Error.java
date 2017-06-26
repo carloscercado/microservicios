@@ -5,11 +5,12 @@ public class Error
     public static final String WITH_OUT_AUTHORIZATION = "01";
     public static final String CREDENTIAL_FALSE = "02";
     public static final String CREDENTIAL_EXPIRED = "03";
-    public static final String PASSWORD_SHORT = "01";
-    public static final String BAD_USERNAME = "02";
-    public static final String BAD_DATA = "03";
-    public static final String BAD_OTHER_DATA = "04";
-    public static final String NO_SAVE = "01";
+    public static final String PASSWORD_SHORT = "04";
+    public static final String BAD_USERNAME = "05";
+    public static final String BAD_DATA = "06";
+    public static final String BAD_OTHER_DATA = "07";
+    public static final String NO_SAVE = "08";
+    public static final String NO_EXIST = "09";
     
     public static String getCredential(String error)
     {

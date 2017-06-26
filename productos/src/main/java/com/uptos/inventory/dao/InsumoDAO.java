@@ -1,35 +1,41 @@
 package com.uptos.inventory.dao;
 
-import com.uptos.inventory.config.MyBatisUtil;
-import com.uptos.inventory.mapper.InsumoMapper;
+import com.uptos.inventory.config.HibernateUtil;
 import com.uptos.inventory.model.Insumo;
-import java.util.List;
-import org.apache.ibatis.session.SqlSession;
+import com.uptos.inventory.model.Perece;
+import java.util.Date;
+import org.hibernate.Session;
 
 /**
  *
  * @author Carlos Cercado
  * @email cercadocarlos@gmail.com
  */
-public class InsumoDAO
+public class InsumoDAO implements Crud<Insumo>
 {
 
-    public static boolean save(Insumo obj)
+    public Insumo create(Insumo obj, Date vencimiento)
     {
-        SqlSession sesion = null;
-        boolean estado = false;
+        Session sesion = null;
+        Insumo salida = null;
         try
         {
-            sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
-            map.insert(obj);
-            sesion.commit();
-            estado = true;
-        } catch (Exception e)
+            sesion = HibernateUtil.getSesion().openSession();
+            sesion.beginTransaction();
+            sesion.save(obj);
+            
+            sesion.getTransaction().commit();
+            sesion.beginTransaction();
+            PereceDAO pere = new PereceDAO();
+            Perece perece2 = new Perece(0, obj, vencimiento);
+            pere.create(perece2);
+            sesion.getTransaction().commit();
+            salida = obj;
+        } catch (Exception ex)
         {
-            System.out.println(e.getMessage());
-            sesion.rollback();
-            estado = false;
+            System.out.println(ex.getMessage());
+            sesion.getTransaction().rollback();
+            salida = null;
         } finally
         {
             if (sesion != null)
@@ -37,81 +43,6 @@ public class InsumoDAO
                 sesion.close();
             }
         }
-        return estado;
-    }
-    
-    public static Insumo findById(int id)
-    {
-        SqlSession sesion = null;
-        Insumo obj = null;
-        try
-        {
-            sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
-            obj = map.getById(id);
-            sesion.commit();
-        } catch (Exception e)
-        {
-            sesion.rollback();
-            obj = null;
-        } finally
-        {
-            if (sesion != null)
-            {
-                sesion.close();
-            }
-        }
-        return obj;
-
-    }
-
-    public static List<Insumo> getAll()
-    {
-        SqlSession sesion = null;
-        List<Insumo> objs = null;
-        try
-        {
-            sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
-            objs = map.getAll();
-            sesion.commit();
-        } catch (Exception e)
-        {
-            sesion.rollback();
-            objs = null;
-        } finally
-        {
-            if (sesion != null)
-            {
-                sesion.close();
-            }
-        }
-        return objs;
-
-    }
-
-    public static List<Insumo> getAllByCategory(int categoria)
-    {
-        SqlSession sesion = null;
-        List<Insumo> objs = null;
-        try
-        {
-            sesion = MyBatisUtil.getSesion().openSession();
-            InsumoMapper map = sesion.getMapper(InsumoMapper.class);
-            objs = map.getAllByCategory(categoria);
-            sesion.commit();
-        } catch (Exception e)
-        {
-            sesion.rollback();
-            objs = null;
-        } finally
-        {
-            if (sesion != null)
-            {
-                sesion.close();
-            }
-        }
-        return objs;
-
+        return salida;
     }
 }

@@ -27,6 +27,18 @@ public class Empresa  implements java.io.Serializable {
     public Empresa() {
     }
 
+    public Empresa(String nombre, String direccion, String estado, String ciudad, String telefono, String correo, String rif)
+    {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.estado = estado;
+        this.ciudad = ciudad;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.rif = rif;
+    }
+
+    
     public Empresa(Integer id)
     {
         this.id = id;
@@ -130,14 +142,18 @@ public class Empresa  implements java.io.Serializable {
             res.add("ciudad", "no puede ser null");
         }
         
-        if (this.correo == null)
+        if (this.telefono == null)
         {
-            res.add("correo", "no puede ser null");
+            res.add("telefono", "no puede ser null");
         }
         
         if (this.estado == null)
         {
             res.add("estado", "no puede ser null");
+        }
+         if (this.rif == null)
+        {
+            res.add("rif", "no puede ser null");
         }
 
        

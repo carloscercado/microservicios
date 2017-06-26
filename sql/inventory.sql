@@ -1,13 +1,14 @@
-﻿/*
-*  ************************************************************
-*/
---Referente a las zonas fisicas donde se ubican los productos
-create role ubicacion;
+﻿create role ubicacion;
 create role productos;
 create role usuarios;
 create role salidas;
 create role compras;
 create role gerencia;
+/*
+*  ************************************************************
+*/
+--Referente a las zonas fisicas donde se ubican los productos
+
 
 CREATE TABLE empresa (
     id int PRIMARY KEY,

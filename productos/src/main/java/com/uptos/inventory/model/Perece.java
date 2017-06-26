@@ -1,5 +1,5 @@
 package com.uptos.inventory.model;
-
+// Generated 31-may-2017 5:05:39 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;

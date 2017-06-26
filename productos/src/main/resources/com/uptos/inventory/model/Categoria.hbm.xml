@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-may-2017 5:05:41 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.uptos.inventory.model.Categoria" table="categoria" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <property name="categoria" type="string">
+            <column name="categoria" length="20" not-null="true" />
+        </property>
+
+    </class>
+</hibernate-mapping>

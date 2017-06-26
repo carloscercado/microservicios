@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-may-2017 5:05:41 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.uptos.inventory.model.Insumo" table="insumo" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="categoria" class="com.uptos.inventory.model.Categoria" fetch="select">
+            <column name="categoria" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="60" not-null="true" />
+        </property>
+        <property name="marca" type="string">
+            <column name="marca" length="20" not-null="true" />
+        </property>
+        <property name="minimo" type="int">
+            <column name="minimo" not-null="true" />
+        </property>
+        <property name="maximo" type="int">
+            <column name="maximo" not-null="true" />
+        </property>
+        <property name="perecedero" type="boolean">
+            <column name="perecedero" not-null="true" />
+        </property>
+        <property name="cantidad" type="int">
+            <column name="cantidad" not-null="true" />
+        </property>
+        <property name="codigo" type="string">
+            <column name="codigo" length="20" not-null="true" unique="true" />
+        </property>
+
+    </class>
+</hibernate-mapping>

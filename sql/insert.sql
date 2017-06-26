@@ -27,3 +27,19 @@ values (1, 'CUBICULO 1-1',1),
  (7, 'CUBICULO 3-1',3),
  (8, 'CUBICULO 3-2',3),
  (9, 'CUBICULO 3-3',3);
+
+ insert into categoria (id, categoria) values (1,'MEDICINA'),
+ (2,'LIMPIEZA'),(3,'OFICINA'),(4,'ELECTRONICOS');
+
+ insert into insumo (id,nombre, marca, perecedero, categoria, codigo)
+ values (1,'MAUSE','GENIUS',FALSE, 4,'040040010'),
+ (2,'TECLADO','GENIUS',FALSE, 4,'040040012'),
+ (3,'MONITOR','GENIUS',FALSE, 4,'040040013'),
+  (4,'SPRAY LIMPIATODO','HOME',TRUE,2,'140040012'),
+ (5,'CLORO','ACNE',TRUE, 2,'140040013'),
+  (6,'SUAVISANTE','SUAVITEL',TRUE, 2,'140040014');
+
+  insert into perece (id,insumo, fecha)
+  values (1,4,now()),
+  (2,5, now()),
+  (3,6, now());
