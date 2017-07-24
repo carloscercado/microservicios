@@ -14,7 +14,7 @@ class EstantesView (BaseView):
             try:
                 resultado = Estante.select()\
                             .where(Estante.empresa == g.empresa)
-                res = [obj.as_dict_without("empresa", "almacen") for obj in resultado]  # noqa E501
+                res = [obj.as_dict_without("almacen") for obj in resultado]
                 return jsonify(res)
             except peewee.IntegrityError:
                 raise EstanteError("Problemas con Estantees")
@@ -24,7 +24,7 @@ class EstantesView (BaseView):
             try:
                 resultado = Estante.get(Estante.id == _id,
                                         Estante.empresa == g.empresa)
-                return jsonify(resultado.as_dict_without("empresa", "almacen"))  # noqa E501
+                return jsonify(resultado.as_dict_without("almacen"))
             except Estante.DoesNotExist:
                 raise EstanteError("Estante no existe", status=404)
 
@@ -46,7 +46,7 @@ class EstantesView (BaseView):
             try:
                 resultado = Estante.select()\
                 .where(Estante.almacen == almacen, Estante.empresa == g.empresa)  # noqa E501
-                res = [obj.as_dict_without("empresa", "almacen") for obj in resultado]  # noqa E501
+                res = [obj.as_dict_without("almacen") for obj in resultado]
                 return jsonify(res)
             except peewee.IntegrityError:
                 raise EstanteError("Problemas con Estantees", status=404)
@@ -67,7 +67,7 @@ class EstantesView (BaseView):
                     nombre=datos.get("nombre").upper(),
                     capacidad=datos.get("capacidad"),
                     capacidad_disponible=datos.get("capacidad"))
-                return jsonify(estante.as_dict_without("empresa", "almacen")), 201  # noqa E501
+                return jsonify(estante.as_dict_without("almacen")), 201
             except Almacen.DoesNotExist:
                 raise EstanteError("Almacen no existe", status=400)
             except peewee.IntegrityError as e:
@@ -91,7 +91,7 @@ class EstantesView (BaseView):
                     getattr(estante, key)
                     setattr(estante, key, parametos[key])
                 if Estante.save() > 0:
-                    return jsonify(estante.as_dict_without("empresa", "almacen"))  # noqa E501
+                    return jsonify(estante.as_dict_without("almacen"))
             except Estante.DoesNotExist:
                 raise EstanteError("Estante no existe", status=404)
             except peewee.IntegrityError as e:

@@ -34,10 +34,8 @@ class ModeloBase(peewee.Model):
         database = conexion
 
     def as_dict(self, *args, **kwargs):
-        return model_to_dict(self, exclude=(Empresa.usuario,
-                                            Almacen.empresa,
-                                            Estante.empresa,
-                                            Cubiculo.empresa,))
+        return model_to_dict(self, exclude=(Categoria.empresa,
+                                            Producto.empresa, ))
 
     def as_dict_without(self, *args, **kwargs):
         data = self.as_dict()
@@ -61,7 +59,7 @@ class Usuario(ModeloBase):
     clave = peewee.CharField(max_length=32)
 
 
-class Empresa (ModeloBase):
+class Empresa(ModeloBase):
     rif = peewee.CharField(max_length=20, unique=True)
     nombre = peewee.CharField(max_length=40)
     telefono = peewee.CharField(max_length=15, null=True)
@@ -70,31 +68,23 @@ class Empresa (ModeloBase):
     usuario = peewee.ForeignKeyField(Usuario)
 
 
-class Almacen(ModeloBase):
+class Categoria(ModeloBase):
+    nombre = peewee.CharField(max_length=15)
     empresa = peewee.ForeignKeyField(Empresa)
+
+
+class Producto(ModeloBase):
     nombre = peewee.CharField(max_length=30)
-    capacidad = peewee.DecimalField()
-    capacidad_disponible = peewee.DecimalField()
-
-
-class Estante (ModeloBase):
-    almacen = peewee.ForeignKeyField(Almacen)
-    nombre = peewee.CharField(max_length=10)
-    capacidad = peewee.DecimalField()
+    categoria = peewee.ForeignKeyField(Categoria)
     empresa = peewee.IntegerField()
-    capacidad_disponible = peewee.DecimalField()
-
-
-class Cubiculo (ModeloBase):
-    estante = peewee.ForeignKeyField(Estante)
-    nombre = peewee.CharField(max_length=10)
-    capacidad = peewee.DecimalField()
-    empresa = peewee.IntegerField()
-    estado = peewee.BooleanField(default=True)
+    cantidad = peewee.IntegerField(default=0)
+    minimo = peewee.IntegerField(default=0)
+    medida = peewee.CharField(max_length=15)
+    perecedero = peewee.BooleanField(default=False)
 
 
 def get_modelos():
-    return [Usuario, Empresa, Almacen, Estante, Cubiculo]
+    return [Categoria, Producto]
 
 
 def crear_tablas():
