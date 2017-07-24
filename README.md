@@ -8,11 +8,11 @@ El sistema de inventario estará conformado por 7 servicios, cada uno desarrolla
 
 A continuación los servicios web que conforman al sistema de inventario:
 
-## Ubicación [ver codigo](https://github.com/carloscercado/microservicios/tree/master/ubicacion)
+## Ubicación [ver codigo](https://github.com/carloscercado/microservicios/tree/master/servicio-ubicacion)
 
 Este servicio manejar toda la informacion referente al espacio fisico de la organizacion donde funcionará el sistema de inventario. Desde aqui se gestionaran los almacenes, los estantes, los cubiculos, las organizaciones entre otras cosas.
 
-## Productos [ver codigo](https://github.com/carloscercado/microservicios/tree/master/productos)
+## Productos [ver codigo](https://github.com/carloscercado/microservicios/tree/master/servicio-productos)
 
 Este servicio maneja toda la informacion referente a los productos con los que trabajan en la organizacion, sus detalles, las categorias, los tamaños y sus fechas de vencimientos respectivas.
 
