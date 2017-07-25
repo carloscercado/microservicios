@@ -34,8 +34,10 @@ class ModeloBase(peewee.Model):
         database = conexion
 
     def as_dict(self, *args, **kwargs):
-        return model_to_dict(self, exclude=(Categoria.empresa,
-                                            Producto.empresa, ))
+        return model_to_dict(self, exclude=(Proveedor.empresa,
+                                            Producto.empresa,
+                                            Compra.empresa,
+                                            Unidad.empresa ))
 
     def as_dict_without(self, *args, **kwargs):
         data = self.as_dict()
@@ -53,30 +55,27 @@ class ModeloBase(peewee.Model):
         return convertir_a_snake_case(cls.__name__)
 
 
-class Usuario(ModeloBase):
-    nombre = peewee.CharField(max_length=30)
-    usuario = peewee.CharField(unique=True, max_length=15)
-    clave = peewee.CharField(max_length=32)
-
-
-class Empresa(ModeloBase):
+class Proveedor(ModeloBase):
     rif = peewee.CharField(max_length=20, unique=True)
-    nombre = peewee.CharField(max_length=40)
-    telefono = peewee.CharField(max_length=15, null=True)
-    ciudad = peewee.CharField(max_length=15)
-    direccion = peewee.CharField(max_length=60)
-    usuario = peewee.ForeignKeyField(Usuario)
-
-
-class Categoria(ModeloBase):
     nombre = peewee.CharField(max_length=15)
-    empresa = peewee.ForeignKeyField(Empresa)
+    empresa = peewee.IntegerField()
+    telefono = peewee.CharField(max_length=15, null=True)
+    correo = peewee.CharField(max_length=30, null=True)
+    descripcion = peewee.TextField(null=True)
+
+
+class Compra(ModeloBase):
+    factura = peewee.CharField(max_length=15)
+    empresa = peewee.IntegerField()
+    proveedor = peewee.ForeignKeyField(Proveedor)
+    total = peewee.DecimalField(default=0)
+    fecha = peewee.DateField()
+    productos = peewee.IntegerField(default=0)
 
 
 class Producto(ModeloBase):
-    codigo = peewee.CharField(max_length=30)
     nombre = peewee.CharField(max_length=30)
-    categoria = peewee.ForeignKeyField(Categoria)
+    categoria = peewee.IntegerField()
     empresa = peewee.IntegerField()
     cantidad = peewee.IntegerField(default=0)
     minimo = peewee.IntegerField(default=0)
@@ -84,8 +83,26 @@ class Producto(ModeloBase):
     perecedero = peewee.BooleanField(default=False)
 
 
+class DetalleCompra(ModeloBase):
+    compra = peewee.ForeignKeyField(Compra)
+    producto = peewee.ForeignKeyField(Producto)
+    cantidad = peewee.IntegerField()
+    costo = peewee.DecimalField()
+    total = peewee.DecimalField()
+
+
+class Unidad(ModeloBase):
+    detalle = peewee.ForeignKeyField(DetalleCompra)
+    cubiculo = peewee.IntegerField()
+    codigo = peewee.CharField(max_length=30)
+    producto = peewee.IntegerField()
+    empresa = peewee.IntegerField()
+    cava = peewee.IntegerField()
+    status = peewee.BooleanField(default=True)
+
+
 def get_modelos():
-    return [Categoria, Producto]
+    return [Proveedor, Compra, DetalleCompra, Unidad]
 
 
 def crear_tablas():
