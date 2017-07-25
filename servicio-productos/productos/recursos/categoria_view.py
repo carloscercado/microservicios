@@ -58,13 +58,13 @@ class CategoriasView(BaseView):
     def put(self, _id):
         with self.conexion.atomic():
             try:
-                categoria = Categoria.get(Categoria.id == _id,
-                                          Categoria.empresa == g.empresa)
                 datos = request.json
                 form = ValidacionCategoria.from_json(datos)
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
+                categoria = Categoria.get(Categoria.id == _id,
+                                          Categoria.empresa == g.empresa)
                 parametos = {
                     "nombre": datos.get("nombre").upper()
                 }

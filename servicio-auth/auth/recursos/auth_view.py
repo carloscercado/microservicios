@@ -1,10 +1,10 @@
 from .base_view import BaseView
-from ..database import Usuario, Conexion
-from ..excepciones import CamposInvalidosError, AuthError, RefreshTokenError
+from ..database import Usuario, Conexion, Empresa
+from ..excepciones import CamposInvalidosError, AuthError, RefreshTokenError, RegistroError  # noqa E501
 import peewee
 from flask_classy import route
 import datetime
-from .validaciones.validaciones import ValidacionLogin, ValidacionRefresh, union_de_errores  # noqa E501
+from .validaciones.validaciones import ValidacionLogin, ValidacionEmpresa, ValidacionRegistro, ValidacionRefresh, union_de_errores  # noqa E501
 from flask import jsonify, request
 import hashlib
 import jwt
@@ -35,7 +35,7 @@ class AuthView(BaseView):
                 refresh_token = jwt.encode(claims_refresh_token, self.API_KEY)
                 res.status = False
                 res.save()
-                conexion = Conexion.create(
+                Conexion.create(
                     usuario=res.usuario.id,
                     user_agent=request.headers.get('User-Agent'),
                     ip=request.remote_addr,
@@ -59,8 +59,8 @@ class AuthView(BaseView):
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
                 password = hashlib.md5(datos.get("password").encode('utf-8')).hexdigest()  # noqa E501
-                username = datos.get("username").upper()
-                usuario = Usuario.get(Usuario.usuario == username,
+                username = datos.get("email").upper()
+                usuario = Usuario.get(Usuario.email == username,
                                       Usuario.clave == password)
 
                 claims_jwt = self.get_claims_jwt(usuario)
@@ -93,11 +93,47 @@ class AuthView(BaseView):
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
-            except:
-                pass
+                form = ValidacionEmpresa.from_json(datos)
+                if not form.validate():
+                    errors = union_de_errores(form.errors)
+                    raise CamposInvalidosError(errors)
+
+                res = Usuario.select()\
+                             .where(Usuario.email == datos.get("email").upper())  # noqa E501
+                if len(res) > 0:
+                    raise RegistroError("Ya existe una cuenta usando este email")  # noqa E501
+
+                res = Empresa.select().where(Empresa.rif == datos.get("rif"))
+                if len(res) > 0:
+                    raise RegistroError("Ya existe una empresa registrada con este rif")  # noqa E501
+
+                password = hashlib.md5(datos.get("clave").encode('utf-8')).hexdigest()  # noqa E501
+                usuario = Usuario.create(
+                    nombre=datos.get("nombre").upper(),
+                    apellido=datos.get("apellido").upper(),
+                    email=datos.get("email").upper(),
+                    clave=password,
+                    pregunta=datos.get("pregunta").upper(),
+                    respuesta=datos.get("respuesta").upper(),
+                    nacimiento=datos.get("nacimiento")
+                    )
+                empresa = Empresa.create(
+                    nombre=datos.get("empresa").upper(),
+                    ciudad=datos.get("ciudad").upper(),
+                    direccion=datos.get("direccion").upper(),
+                    rif=datos.get("rif"),
+                    usuario=usuario.id,
+                    telefono=datos.get("telefono")
+                    )
+                usuario.empresa = empresa.id
+                usuario.save()
+                return jsonify(usuario.as_dict_only_with("nombre", "apellido", "email")), 201  # noqa E501
+            except peewee.IntegrityError as e:
+                print(e)
+                raise RegistroError("Problemas al registrar usuario")
 
     def get_claims_jwt(self, usuario):
-        return  {
+        return {
             "exp": (datetime.datetime.utcnow() + datetime.timedelta(minutes=15)),  # noqa E501
             "iss": "inventario",
             "iat": datetime.datetime.utcnow(),
@@ -112,5 +148,6 @@ class AuthView(BaseView):
         return {
             "sub": usuario.id,
             "iat": datetime.datetime.utcnow(),
-            "iss": "refresh token"
+            "iss": "refresh token",
+            "email": usuario.email
         }

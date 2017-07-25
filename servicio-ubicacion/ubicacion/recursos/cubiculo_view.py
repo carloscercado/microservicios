@@ -76,13 +76,13 @@ class CubiculosView (BaseView):
     def put(self, _id):
         with self.conexion.atomic():
             try:
-                cubiculo = Cubiculo.get(Cubiculo.id == _id,
-                                        Cubiculo.empresa == g.empresa)
                 datos = request.json
                 form = ValidacionCubiculo.from_json(datos)
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
+                cubiculo = Cubiculo.get(Cubiculo.id == _id,
+                                        Cubiculo.empresa == g.empresa)
                 parametos = {
                     "nombre": datos.get("nombre").upper(),
                     "capacidad": datos.get("capacidad")

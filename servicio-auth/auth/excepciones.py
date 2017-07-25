@@ -32,3 +32,11 @@ class CamposInvalidosError(BaseError):
 class RefreshTokenError(BaseError):
     code = "0004"
     status = 400
+
+
+class RegistroError(BaseError):
+    code = "0005"
+
+
+class UsuarioError(BaseError):
+    code = "0006"

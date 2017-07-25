@@ -76,13 +76,13 @@ class EstantesView (BaseView):
     def put(self, _id):
         with self.conexion.atomic():
             try:
-                estante = Estante.get(Estante.id == _id,
-                                      Estante.empresa == g.empresa)
                 datos = request.json
                 form = ValidacionEstante.from_json(datos)
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
+                estante = Estante.get(Estante.id == _id,
+                                      Estante.empresa == g.empresa)
                 parametos = {
                     "nombre": datos.get("nombre").upper(),
                     "capacidad": datos.get("capacidad")

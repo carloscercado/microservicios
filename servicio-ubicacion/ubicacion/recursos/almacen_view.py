@@ -59,13 +59,13 @@ class AlmacenesView (BaseView):
     def put(self, _id):
         with self.conexion.atomic():
             try:
-                almacen = Almacen.get(Almacen.id == _id,
-                                      Almacen.empresa == g.empresa)
                 datos = request.json
                 form = ValidacionAlmacen.from_json(datos)
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
+                almacen = Almacen.get(Almacen.id == _id,
+                                      Almacen.empresa == g.empresa)
                 parametos = {
                     "nombre": datos.get("nombre").upper(),
                     "capacidad": datos.get("capacidad")

@@ -35,7 +35,7 @@ class ModeloBase(peewee.Model):
         database = conexion
 
     def as_dict(self, *args, **kwargs):
-        return model_to_dict(self, exclude=(Usuario.clave, ))
+        return model_to_dict(self, exclude=(Usuario.clave, Usuario.empresa, Usuario.respuesta))  # noqa E501
 
     def as_dict_without(self, *args, **kwargs):
         data = self.as_dict()
@@ -56,7 +56,6 @@ class ModeloBase(peewee.Model):
 class Usuario(ModeloBase):
     nombre = peewee.CharField(max_length=30)
     apellido = peewee.CharField(max_length=30)
-    usuario = peewee.CharField(unique=True, max_length=15)
     clave = peewee.CharField(max_length=32)
     email = peewee.CharField(max_length=40, unique=True)
     pregunta = peewee.CharField(null=True, max_length=50)
@@ -64,6 +63,15 @@ class Usuario(ModeloBase):
     ultima_conexion = peewee.DateTimeField(null=True)
     nacimiento = peewee.DateField()
     empresa = peewee.IntegerField(null=True)
+
+
+class Empresa (ModeloBase):
+    rif = peewee.CharField(max_length=20, unique=True)
+    nombre = peewee.CharField(max_length=40)
+    telefono = peewee.CharField(max_length=15, null=True)
+    ciudad = peewee.CharField(max_length=15)
+    direccion = peewee.CharField(max_length=60)
+    usuario = peewee.ForeignKeyField(Usuario)
 
 
 class Conexion(ModeloBase):

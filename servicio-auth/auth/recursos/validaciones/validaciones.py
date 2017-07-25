@@ -1,9 +1,9 @@
 import wtforms_json
-from wtforms import Form, StringField, IntegerField, validators, DateTimeField
+from wtforms import Form, StringField, validators, DateTimeField
 wtforms_json.init()
 
 requerido = "es requerido"
-password_mensaje = "Minimo 8 caracteres, Maximo 15, Al menos una letra mayúscula, Al menos una letra minucula, Al menos un dígito, No espacios en blanco, Al menos 1 caracter especial"  # noqa E501
+password_mensaje = "clave invalida, minimo 6 caracteres, maximo 15, al menos una letra mayúscula, al menos un dígito, sin espacios en blanco y al menos 1 caracter especial"  # noqa E501
 
 
 def union_de_errores(formErrors):
@@ -15,17 +15,35 @@ def union_de_errores(formErrors):
 
 
 class ValidacionLogin(Form):
-    username = StringField("username", [
-        validators.InputRequired(message=requerido),
-        validators.Length(min=6, max=20, message="caracteres minimo 6")])
+    email = StringField("email", [
+        validators.Regexp(r'^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$', message="email invalido")  # noqa E501
+        ])
 
     password = StringField("password", [
         validators.InputRequired(message=requerido)])
-    #  validators.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,15}', message=password_mensaje)
 
 
 class ValidacionRefresh(Form):
     refresh_token = StringField("refresh_token", [
+        validators.InputRequired(message=requerido)])
+
+
+class ValidacionEmpresa(Form):
+    empresa = StringField("empresa", [
+        validators.InputRequired(message=requerido)])
+
+    rif = StringField("rif", [
+        validators.InputRequired(message=requerido),
+        validators.Regexp(r'^[VEPCJ]-\d{8}-\d{1}$', message="formato de rif invalido, ejemplo V-12345678-1")])  # noqa E501
+
+    telefono = StringField("telefono", [
+        validators.InputRequired(message=requerido),
+        validators.Regexp(r'^\d{3}\-\d{7}?$', message="telefono invalido, formato 123-1234567")])  # noqa E501
+
+    ciudad = StringField("ciudad", [
+        validators.InputRequired(message=requerido)])
+
+    direccion = StringField("direccion", [
         validators.InputRequired(message=requerido)])
 
 
@@ -36,14 +54,12 @@ class ValidacionRegistro(Form):
     apellido = StringField("apellido", [
         validators.InputRequired(message=requerido)])
 
-    usuario = StringField("usuario", [
-        validators.InputRequired(message=requerido),
-        validators.Length(min=6, max=15, message="caracteres entre 5 a 15")])
     clave = StringField("clave", [
         validators.InputRequired(message=requerido),
-        validators.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,15}', message=password_mensaje)])  # noqa E501
+        validators.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.()$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,15}', message=password_mensaje)])  # noqa E501
 
     email = StringField("email", [
+        validators.InputRequired(message=requerido),
         validators.Regexp(r'^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$', message="email invalido")  # noqa E501
         ])
 

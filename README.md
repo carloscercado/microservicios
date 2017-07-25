@@ -16,7 +16,7 @@ Este servicio manejar toda la informacion referente al espacio fisico de la orga
 
 Este servicio maneja toda la informacion referente a los productos con los que trabajan en la organizacion, sus detalles, las categorias, los tamaños y sus fechas de vencimientos respectivas.
 
-## Usuarios [ver codigo](#)
+## Usuarios [ver codigo](https://github.com/carloscercado/microservicios/tree/master/servicio-auth)
 
 Este servicio gestiona la integridad y confidencialidad de la informacion que se maneja en el sistema, permite manejar los usuarios y sus datos, las cuentas de usuario y el control de acceso.
 

@@ -67,13 +67,13 @@ class ProductosView(BaseView):
     def put(self, _id):
         with self.conexion.atomic():
             try:
-                producto = Producto.get(Producto.id == _id,
-                                        Producto.empresa == g.empresa)
                 datos = request.json
                 form = ValidacionProducto.from_json(datos)
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
+                producto = Producto.get(Producto.id == _id,
+                                        Producto.empresa == g.empresa)
                 categoria = Categoria.get(Categoria.id == datos.get("categoria"),  # noqa E501
                                           Categoria.empresa == g.empresa)
                 perecedero = False if datos.get("perecedero").lower()=="false" else True  # noqa E501
@@ -91,5 +91,7 @@ class ProductosView(BaseView):
                     return jsonify(producto.as_dict())
             except Producto.DoesNotExist:
                 raise ProductoError("Producto no existe", status=404)
+            except Categoria.DoesNotExist:
+                raise ProductoError("Categoria no existe", status=404)
             except peewee.IntegrityError as e:
                 raise ProductoError("Error al modificar Producto")

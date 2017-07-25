@@ -1,12 +1,12 @@
-from flask import request, jsonify, g
+from flask import request, jsonify
 from flask.json import JSONEncoder
 import auth
 from flask_cors import CORS
 from decimal import Decimal
 import datetime
 import jwt
-import uuid
 from .auth_view import AuthView
+from .usuario_view import UsuariosView
 from ..excepciones import BaseError, AuthError
 
 
@@ -29,7 +29,8 @@ class AllMightyJSONEncoder(JSONEncoder):
 
 
 def cargar_recursos(app):
-    AuthView.build(app, str(uuid.uuid4()))
+    AuthView.build(app)
+    UsuariosView.build(app)
     CORS(app)
     app.json_encoder = AllMightyJSONEncoder
 
