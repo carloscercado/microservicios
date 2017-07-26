@@ -35,9 +35,9 @@ class ModeloBase(peewee.Model):
 
     def as_dict(self, *args, **kwargs):
         return model_to_dict(self, exclude=(Proveedor.empresa,
-                                            Producto.empresa,
                                             Compra.empresa,
-                                            Unidad.empresa ))
+                                            Unidad.empresa,
+                                            DetalleCompra.compra))
 
     def as_dict_without(self, *args, **kwargs):
         data = self.as_dict()
@@ -68,17 +68,13 @@ class Compra(ModeloBase):
     factura = peewee.CharField(max_length=15)
     empresa = peewee.IntegerField()
     proveedor = peewee.ForeignKeyField(Proveedor)
-    total = peewee.DecimalField(default=0)
+    total = peewee.DecimalField(max_digits=ModeloBase._presicion, decimal_places=ModeloBase._decimales, default=0)  # noqa E501
     fecha = peewee.DateField()
     productos = peewee.IntegerField(default=0)
 
 
 class Producto(ModeloBase):
     nombre = peewee.CharField(max_length=30)
-    categoria = peewee.IntegerField()
-    empresa = peewee.IntegerField()
-    cantidad = peewee.IntegerField(default=0)
-    minimo = peewee.IntegerField(default=0)
     medida = peewee.CharField(max_length=15)
     perecedero = peewee.BooleanField(default=False)
 
@@ -87,7 +83,7 @@ class DetalleCompra(ModeloBase):
     compra = peewee.ForeignKeyField(Compra)
     producto = peewee.ForeignKeyField(Producto)
     cantidad = peewee.IntegerField()
-    costo = peewee.DecimalField()
+    costo = peewee.DecimalField(max_digits=ModeloBase._presicion, decimal_places=ModeloBase._decimales)  # noqa E501
     total = peewee.DecimalField()
 
 

@@ -81,6 +81,7 @@ class Producto(ModeloBase):
     cantidad = peewee.IntegerField(default=0)
     minimo = peewee.IntegerField(default=0)
     medida = peewee.CharField(max_length=15)
+    precio = peewee.DecimalField(max_digits=ModeloBase._presicion, decimal_places=ModeloBase._decimales, default=0)  # noqa E501)
     perecedero = peewee.BooleanField(default=False)
 
 

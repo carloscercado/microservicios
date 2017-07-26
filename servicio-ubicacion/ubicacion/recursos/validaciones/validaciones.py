@@ -17,7 +17,7 @@ def union_de_errores(formErrors):
 class ValidacionEmpresa(Form):
     rif = StringField("rif", [
         validators.InputRequired(message=requerido),
-        validators.Length(min=8, max=20, message="caracteres entres 8 y 20")])
+        validators.Regexp(r'^[VEPCJ]-\d{8}-\d{1}$', message="formato de rif invalido, ejemplo V-12345678-1")])  # noqa E501
 
     nombre = StringField("nombre", [
         validators.InputRequired(message=requerido),

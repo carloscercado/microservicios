@@ -1,10 +1,11 @@
-from flask import request, jsonify, g
+from flask import request, jsonify, g, debughelpers
 from flask.json import JSONEncoder
 import compras
 from flask_cors import CORS
 from decimal import Decimal
 import datetime
 from .proveedor_view import ProveedoresView
+from .compra_view import ComprasView
 import jwt
 from ..excepciones import BaseError, AuthError
 
@@ -29,6 +30,7 @@ class AllMightyJSONEncoder(JSONEncoder):
 
 def cargar_recursos(app):
     ProveedoresView.build(app)
+    ComprasView.build(app)
     CORS(app)
     app.json_encoder = AllMightyJSONEncoder
 
@@ -56,3 +58,10 @@ def cargar_recursos(app):
     def excepciones(e):
         response = jsonify(e.getJSON())
         return response, e.status
+
+
+    @app.errorhandler(debughelpers.FormDataRoutingRedirect)
+    def excepciones(e):
+        response = jsonify({"mensaje":"falta / al final del recurso",
+                            "codigo":"0000"})
+        return response, 400

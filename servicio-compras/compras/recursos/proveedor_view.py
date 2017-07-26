@@ -2,7 +2,7 @@ from .base_view import BaseView
 from ..database import Proveedor, Producto
 from ..excepciones import ProveedorError, CamposInvalidosError
 import peewee
-#from .validaciones.validaciones import ValidacionProveedor, union_de_errores
+from .validaciones.validaciones import ValidacionProveedor, union_de_errores
 from flask import jsonify, g, request
 
 
@@ -39,7 +39,6 @@ class ProveedoresView(BaseView):
             except Proveedor.DoesNotExist:
                 raise ProveedorError("Proveedor no existe", status=404)
 
-    """
     def post(self):
         with self.conexion.atomic():
             try:
@@ -49,10 +48,19 @@ class ProveedoresView(BaseView):
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
 
-                Proveedor = Proveedor.create(
+                resultado = Proveedor.select().where(Proveedor.rif ==
+                                                     datos.get("rif"))
+                if len(resultado) > 0:
+                    raise ProveedorError("Ya existe un proveedor con ese RIF registrado")
+
+                proveedor = Proveedor.create(
+                    rif=datos.get("rif"),
+                    correo=datos.get("correo").upper(),
+                    telefono=datos.get("telefono"),
+                    descripcion=datos.get("descripcion").upper(),
                     empresa=g.empresa,
                     nombre=datos.get("nombre").upper())
-                return jsonify(Proveedor.as_dict()), 201
+                return jsonify(proveedor.as_dict()), 201
             except peewee.IntegrityError as e:
                 raise ProveedorError("Error al registrar Proveedor")
 
@@ -64,18 +72,20 @@ class ProveedoresView(BaseView):
                 if not form.validate():
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
-                Proveedor = Proveedor.get(Proveedor.id == _id,
+                proveedor = Proveedor.get(Proveedor.id == _id,
                                           Proveedor.empresa == g.empresa)
                 parametos = {
-                    "nombre": datos.get("nombre").upper()
+                    "nombre": datos.get("nombre").upper(),
+                    "descripcion": datos.get("descripcion").upper(),
+                    "telefono": datos.get("telefono"),
+                    "correo": datos.get("correo").upper()
                 }
                 for key in parametos.keys():
-                    getattr(Proveedor, key)
-                    setattr(Proveedor, key, parametos[key])
-                if Proveedor.save() > 0:
-                    return jsonify(Proveedor.as_dict())
+                    getattr(proveedor, key)
+                    setattr(proveedor, key, parametos[key])
+                if proveedor.save() > 0:
+                    return jsonify(proveedor.as_dict())
             except Proveedor.DoesNotExist:
                 raise ProveedorError("Proveedor no existe", status=404)
             except peewee.IntegrityError as e:
                 raise ProveedorError("Error al modificar Proveedor")
-    """

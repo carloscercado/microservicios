@@ -31,3 +31,7 @@ class CamposInvalidosError(BaseError):
 
 class ProveedorError(DatabaseError):
     code = "0004"
+
+
+class CompraError(DatabaseError):
+    code = "0004"
