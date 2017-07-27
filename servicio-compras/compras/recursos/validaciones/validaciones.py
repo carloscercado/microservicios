@@ -1,6 +1,5 @@
 import wtforms_json
 from wtforms import Form, StringField, IntegerField, DateTimeField, validators
-import re
 wtforms_json.init()
 
 requerido = "es requerido"
@@ -65,4 +64,3 @@ class ValidacionDetalleCompra(Form):
 
     producto = IntegerField("producto", [
         validators.InputRequired(message=requerido)])
-

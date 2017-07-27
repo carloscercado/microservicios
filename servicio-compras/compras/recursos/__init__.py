@@ -55,13 +55,12 @@ def cargar_recursos(app):
             raise AuthError("firma invalida", status=500)
 
     @app.errorhandler(BaseError)
-    def excepciones(e):
+    def manejador_de_excepciones(e):
         response = jsonify(e.getJSON())
         return response, e.status
 
-
     @app.errorhandler(debughelpers.FormDataRoutingRedirect)
-    def excepciones(e):
-        response = jsonify({"mensaje":"falta / al final del recurso",
-                            "codigo":"0000"})
+    def excepcion_post(e):
+        response = jsonify({"mensaje": "falta / al final del recurso",
+                            "codigo": "0000"})
         return response, 400

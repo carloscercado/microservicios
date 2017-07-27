@@ -4,7 +4,6 @@ from ..excepciones import CompraError, CamposInvalidosError
 import peewee
 from .validaciones.validaciones import ValidacionCompra, ValidacionDetalleCompra,  union_de_errores  # noqa E501
 from flask import jsonify, g, request
-from datetime import datetime
 import decimal
 
 
@@ -56,22 +55,20 @@ class ComprasView(BaseView):
                     errors = union_de_errores(form.errors)
                     raise CamposInvalidosError(errors)
 
-                if type(datos.get("detalles")) != list:
+                detalles = datos.get("detalles")
+                if (type(detalles) != list) or (len(detalles[0]) == 0):
                     raise CompraError("Son necesarios los articulos comprados")  # noqa E501
 
-                detalles = self.validar_detalles(datos.get("detalles"))
                 proveedor = Proveedor.get(Proveedor.id ==
                                           datos.get("proveedor"))
+                Compra.validar_detalles(({}))
                 compra = Compra.create(
                     empresa=g.empresa,
                     factura=datos.get("factura").upper(),
                     proveedor=proveedor.id,
                     fecha=datos.get("fecha")
                 )
-                detalles, total, productos = self.registrar_detalles(detalles, compra.id)  # noqa E501
-                compra.total = total
-                compra.productos = productos
-                compra.save()
+                detalles = compra.registrar_detalles(detalles)
                 compra = compra.as_dict()
                 compra["detalles"] = detalles
                 return jsonify(compra), 201
@@ -81,32 +78,6 @@ class ComprasView(BaseView):
                 raise CompraError("producto no existe", status=400)
             except peewee.IntegrityError as e:
                 raise CompraError("Error al registrar Compra")
-            except KeyError:
-                raise CompraError("Hay campos adicionales en los detalles")
-
-    def validar_detalles(self, detalles):
-        for detalle in detalles:
-            form = ValidacionDetalleCompra.from_json(detalle)
-            if not form.validate():
-                errors = union_de_errores(form.errors)
-                raise CamposInvalidosError(errors)
-            producto = Producto.get(Producto.id == detalle.get("producto"))
-            cantidad = decimal.Decimal(detalle.get("cantidad"))
-            costo = decimal.Decimal(detalle.get("costo"))
-            detalle["total"] = (cantidad * costo)
-        return detalles
-
-    def registrar_detalles(self, detalles, compra):
-        salida = list()
-        suma = 0
-        productos = 0
-        for detalle in detalles:
-            detalle["compra"] = compra
-            res = DetalleCompra.create(**detalle)
-            suma = suma + detalle["total"]
-            productos = productos + detalle["cantidad"]
-            salida.append(res.as_dict())
-        return salida, suma, productos
 
     """
     def put(self, _id):

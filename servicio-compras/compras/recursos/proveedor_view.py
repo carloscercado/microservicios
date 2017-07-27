@@ -1,5 +1,5 @@
 from .base_view import BaseView
-from ..database import Proveedor, Producto
+from ..database import Proveedor
 from ..excepciones import ProveedorError, CamposInvalidosError
 import peewee
 from .validaciones.validaciones import ValidacionProveedor, union_de_errores
@@ -51,7 +51,7 @@ class ProveedoresView(BaseView):
                 resultado = Proveedor.select().where(Proveedor.rif ==
                                                      datos.get("rif"))
                 if len(resultado) > 0:
-                    raise ProveedorError("Ya existe un proveedor con ese RIF registrado")
+                    raise ProveedorError("Ya existe un proveedor con ese RIF registrado")  # noqa E501
 
                 proveedor = Proveedor.create(
                     rif=datos.get("rif"),

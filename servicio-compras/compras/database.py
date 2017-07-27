@@ -2,6 +2,9 @@ import peewee as peewee
 from playhouse.shortcuts import model_to_dict
 import os
 import re
+from decimal import Decimal
+from .excepciones import CamposInvalidosError
+from .recursos.validaciones.validaciones import ValidacionDetalleCompra, union_de_errores
 
 base_datos = os.environ.get("DB_NAME", "inventario")
 equipo = os.environ.get("DB_HOST", "127.0.0.1")
@@ -71,6 +74,30 @@ class Compra(ModeloBase):
     total = peewee.DecimalField(max_digits=ModeloBase._presicion, decimal_places=ModeloBase._decimales, default=0)  # noqa E501
     fecha = peewee.DateField()
     productos = peewee.IntegerField(default=0)
+
+    def validar_detalles(detalles):
+        for detalle in detalles:
+            form = ValidacionDetalleCompra.from_json(detalle)
+            if not form.validate():
+                errors = union_de_errores(form.errors)
+                raise CamposInvalidosError(errors)
+            Producto.get(Producto.id == detalle.get("producto"))
+            cantidad = Decimal(detalle.get("cantidad"))
+            costo = Decimal(detalle.get("costo"))
+            detalle["total"] = (cantidad * costo)
+        return detalles
+
+    def registrar_detalles(self, detalles):
+        detalles = Compra.validar_detalles(detalles)
+        lista = list()
+        for detalle in detalles:
+            detalle["compra"] = self.id
+            res = DetalleCompra.create(**detalle)
+            self.total = self.total + Decimal(detalle["total"])
+            self.productos = self.productos + int(detalle["cantidad"])
+            lista.append(res.as_dict())
+        self.save()
+        return lista
 
 
 class Producto(ModeloBase):
